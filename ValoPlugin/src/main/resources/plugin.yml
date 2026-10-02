@@ -1,0 +1,23 @@
+name: ValoPlugin
+version: '${pluginVersion}'
+main: val.code.ValoPlugin
+api-version: '1.21'
+description: 한국어 UI 기반 라운드형 전술 미니게임
+author: ValCode
+load: POSTWORLD
+
+commands:
+  valo:
+    description: ValoPlugin 메뉴 및 관리 명령어
+    usage: /valo
+    aliases: [val]
+    permission: valo.use
+
+permissions:
+  valo.use:
+    description: 일반 메뉴와 경기 참여
+    default: true
+
+  valo.admin:
+    description: 로비, 맵, 경기 관리
+    default: op

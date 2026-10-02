@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+}
+
+group = 'val.code'
+version = '1.0.0'
+
+def targetJava = Integer.parseInt(
+        providers.gradleProperty('javaVersion').getOrElse('21')
+)
+
+def paperVersion = providers.gradleProperty('paperVersion')
+        .getOrElse('1.21.8-R0.1-SNAPSHOT')
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'papermc'
+        url = uri('https://repo.papermc.io/repository/maven-public/')
+    }
+}
+
+dependencies {
+    compileOnly "io.papermc.paper:paper-api:${paperVersion}"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(targetJava)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = targetJava
+}
+
+tasks.processResources {
+    filteringCharset = 'UTF-8'
+    inputs.property('pluginVersion', project.version)
+
+    filesMatching('plugin.yml') {
+        expand(pluginVersion: project.version)
+    }
+}
+
+tasks.jar {
+    archiveBaseName = 'ValoPlugin'
+}
+
+tasks.register('printTarget') {
+    doLast {
+        println "Paper API: ${paperVersion}"
+        println "Java: ${targetJava}"
+    }
+}
